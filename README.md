@@ -73,6 +73,18 @@ Recipes
 * client (mount a glusterfs volume)
 
 
+### Setting Up Clients
+
+Include the client recipe into the runlist of your nodes and set on them attributes.
+
+#### Example
+
+```ruby
+  node['glusterfs']['client']['myvol']['volume'] = '/myvol'
+  node['glusterfs']['client']['myvol']['mount_point'] = '/mnt/data'
+  node['glusterfs']['client']['myvol']['server'] = 'host1.example'
+```
+
 Resources/Providers
 -------------------
 
@@ -88,15 +100,43 @@ glusterfs_probe 'my-custom-host.test'
 
 ### Volume
 
+Create a GlusterFS volume
+
 #### Example
+
+##### Creation of a replicated volume on two hosts
 
 ```ruby
 glusterfs_volume 'myvol' do
   type 'replica'
   type_number 2
   transport_type 'tcp'
-  servers ['host1.example','host2.example']
-  mount_points ['/mnt/brick1','/mnt/brick2']
+  mount_points ['host1.example:/mnt/brick1','host2.example:/mnt/brick2']
+end
+```
+
+#### Creation of a Distributed-Disperse volume on three hosts
+
+```ruby
+glusterfs_volume 'myvol' do
+  type 'disperse'
+  type_number: 3
+  redundancy: 'redundancy 4'
+  transport_type: 'tcp'
+  mount_points: [
+    'host1.example:/mnt/brick1',
+    'host1.example:/mnt/brick2',
+    'host1.example:/mnt/brick3',
+    'host1.example:/mnt/brick4',
+    'host2.example:/mnt/brick1',
+    'host2.example:/mnt/brick2',
+    'host2.example:/mnt/brick3',
+    'host2.example:/mnt/brick4',
+    'host3.example:/mnt/brick1',
+    'host3.example:/mnt/brick2',
+    'host3.example:/mnt/brick3',
+    'host3.example:/mnt/brick4'
+  ]
 end
 ```
 
