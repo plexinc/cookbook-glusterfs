@@ -20,7 +20,7 @@ action :create do
   volume = new_resource.name
   if been_created?(volume)
     converge_by("Creating #{new_resource}") do
-      volume_create(bind)
+      volume_create
     end
   end
 end
@@ -38,31 +38,26 @@ end
 
 action :expand do
   volume = new_resource.name
-  converge_by("Expanding #{new_resource}") do
-    shell_out(
-      "#{new_resource.bin} volume add-brick #{volume} #{bind}"
-    ).error!
-  end
-end
-
-def bind
-  new_resource.mount_points.map do |mount_point|
-    new_resource.servers.map do |server|
-      "#{server}:#{mount_point}"
+  if been_started?(volume)
+    converge_by("Expanding #{new_resource}") do
+      shell_out(
+        "#{new_resource.bin} volume add-brick #{volume} \
+           #{new_resource.mount_points}"
+      ).error!
     end
   end
 end
 
-def default_volume_command(bind)
+def default_volume_command
   "#{new_resource.bin} volume create #{new_resource.name} \
     #{new_resource.type} #{new_resource.type_number} \
     #{new_resource.redundancy} \
     transport #{new_resource.transport_type} \
-    #{bind.join(' ')} force"
+    #{new_resource.mount_points.join(' ')} force"
 end
 
-def volume_create(bind)
-  shell_out(default_volume_command(bind)).error!
+def volume_create
+  shell_out(default_volume_command).error!
 end
 
 def been_created?(volume)
