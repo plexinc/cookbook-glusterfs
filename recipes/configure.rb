@@ -41,7 +41,6 @@ if gluster_cluster['my_id'] == initiator_id
       transport_type vol['transport_type']
       mount_points vol['mount_points']
       type vol['type']
-      servers gluster_cluster['hosts']
       action [:create, :start]
     end
   end
