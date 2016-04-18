@@ -57,9 +57,22 @@ suites:
             name: 'myvol'
             type: 'disperse'
             type_number: 3
-            redundancy: 'redundancy 1'
+            redundancy: 'redundancy 4'
             transport_type: 'tcp'
-            mount_points: ['/mnt/brick1']
+            mount_points: [
+              'glusterfs-kitchen-1:/mnt/brick1',
+              'glusterfs-kitchen-1:/mnt/brick2',
+              'glusterfs-kitchen-1:/mnt/brick3',
+              'glusterfs-kitchen-1:/mnt/brick4',
+              'glusterfs-kitchen-2:/mnt/brick1',
+              'glusterfs-kitchen-2:/mnt/brick2',
+              'glusterfs-kitchen-2:/mnt/brick3',
+              'glusterfs-kitchen-2:/mnt/brick4',
+              'glusterfs-kitchen-3:/mnt/brick1',
+              'glusterfs-kitchen-3:/mnt/brick2',
+              'glusterfs-kitchen-3:/mnt/brick3',
+              'glusterfs-kitchen-3:/mnt/brick4'
+            ]
   <% end %>
 <% end %>
   - name: glusterfs-4
@@ -74,4 +87,4 @@ suites:
           myvol:
             volume: '/myvol'
             mount_point: '/mnt/data'
-            server: 'glusterfs-kitchen-1.kitchen'
+            server: 'glusterfs-kitchen-3.kitchen'
