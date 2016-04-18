@@ -19,11 +19,9 @@
 # - some suites must converge first
 
 require 'kitchen/command'
-# comment
+
 module Kitchen
-  # comment
   module Command
-    # comment
     module RunAction
       alias run_action_official run_action
 
@@ -59,6 +57,7 @@ module Kitchen
       end
 
       def run_converge(_instances, services, helpers, _type = nil)
+        run_create(nil, services, helpers)
         run_action_official(:converge, helpers)
         run_action_official(:converge, services)
       end

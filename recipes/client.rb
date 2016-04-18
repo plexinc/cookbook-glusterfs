@@ -14,7 +14,22 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+# Install glusterfs client
+%w(glusterfs glusterfs-fuse attr).each do |pkg|
+  package pkg
+end
+
+if node['glusterfs']['client']
+  node['glusterfs']['client'].each_pair do |_key, client|
+    directory client['mount_point'] do
+      recursive true
+      action :create
+    end
+    mount client['mount_point'] do
+      device "#{client['server']}:#{client['volume']}"
+      fstype 'glusterfs'
+      action [:enable, :mount]
+    end
+  end
+end
+return if node['glusterfs']['client'].nil?

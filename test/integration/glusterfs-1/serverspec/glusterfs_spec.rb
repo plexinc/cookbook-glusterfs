@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 Sam4Mobile
+# Copyright (c) 2015-2016 Sam4Mobile
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,29 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+require 'spec_helper'
+
+describe package('glusterfs-server') do
+  it { should be_installed }
+end
+
+describe service('glusterd') do
+  it { should be_running }
+  it { should be_enabled }
+end
+
+describe port(240_07) do
+  it { should be_listening }
+end
+
+describe command(
+  'gluster volume info | grep -A5 myvol | grep -B 3 Started'
+) do
+  its(:exit_status) { should eq 0 }
+end
+
+describe command(
+  'gluster peer status | grep "Number of Peers:" | grep "2"'
+) do
+  its(:exit_status) { should eq 0 }
+end

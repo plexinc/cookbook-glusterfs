@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+package 'glusterfs-server' do
+  version node['glusterfs']['server']['pkg_version']
+  action :install
+end

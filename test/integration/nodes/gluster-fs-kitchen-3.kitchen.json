@@ -1,0 +1,8 @@
+{
+  "id": "glusterfs-kitchen-3.kitchen",
+  "run_list": [ "role[glusterfs-kitchen]" ],
+  "automatic": {
+    "fqdn": "glusterfs-kitchen-3.kitchen",
+    "roles": ["glusterfs-kitchen"]
+  }
+}

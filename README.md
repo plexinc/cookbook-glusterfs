@@ -1,10 +1,12 @@
 GlusterFS
-=============
+==================
 
 Description
 -----------
 
-Installs/Configures a GlusterFS cluster using systemd
+GlusterFS is a scalable network filesystem.
+
+This cookbook focuses on deploying a GlusterFS cluster via Chef.
 
 Requirements
 ------------
@@ -16,16 +18,39 @@ Declared in [metadata.rb](metadata.rb) and in [Gemfile](Gemfile).
 ### Platforms
 
 A *systemd* managed distribution:
-- RHEL Family 7, tested on Centos
-
+- RHEL Family 7, tested on Centos 7.2
 
 Usage
 -----
 
+### Easy Setup
+
+Create a role `glusterfs` having `recipe['glusterfs']` in its
+runlist and setting `node['glusterfs']['role']` to itself. Add this
+role in the runlists of the nodes you want to use for your cluster. By default,
+you need exactly 3 nodes.
+
+### Search
+
+By default, the *config* recipe use a search to find the members of a cluster.
+The search is parametrized by a role name, defined in attribute
+`node['glusterfs']['role']` which default to *glusterfs*.
+Node having this role in their expanded runlist will be considered in the same
+glusterfs cluster. For safety reason, if search is used, you need to define
+`node['glusterfs']['size']` (3 by default). The cookbook will return
+(with success) until the search return *size* nodes. This ensures the
+stability of the configuration during the initial startup of a cluster.
+
+If you do not want to use search, it is possible to define
+`node['glusterfs']['hosts']` with an array containing the hostnames of
+the nodes of a glusterfs cluster. In this case, *size* attribute is ignored
+and search deactivated.
+
 ### Test
 
 This cookbook is fully tested through the installation of a working 3-nodes
-cluster in docker hosts. This uses kitchen, docker and some monkey-patching.
+cluster in docker hosts. This uses kitchen (>= 1.5.0), docker (>= 1.10) and
+a small monkey-patch.
 
 For more information, see *.kitchen.yml* and *test* directory.
 
@@ -40,14 +65,40 @@ this cookbook behavior.
 Recipes
 -------
 
-### default
+* default
+* repository (setup yum repositories)
+* package (install glusterfs-server)
+* service (make sure glusterd service is enabled and started)
+* configure (probe an host into the cluster and create a volume)
+* client (mount a glusterfs volume)
 
-Do some things.
 
 Resources/Providers
 -------------------
 
-None.
+### Probe
+
+Probe an host into the GlusterFS cluster.
+
+#### Example
+
+```ruby
+glusterfs_probe 'my-custom-host.test'
+```
+
+### Volume
+
+#### Example
+
+```ruby
+glusterfs_volume 'myvol' do
+  type 'replica'
+  type_number 2
+  transport_type 'tcp'
+  servers ['host1.example','host2.example']
+  mount_points ['/mnt/brick1','/mnt/brick2']
+end
+```
 
 Changelog
 ---------
@@ -63,10 +114,10 @@ request.
 License and Author
 ------------------
 
-- Author:: Florian Philippon  (<florian.philippon@s4m.io>)
+- Author:: Florian Philippon (<florian.philippon@s4m.io>)
 
 ```text
-Copyright (c) 2016 Sam4Mobile
+Copyright (c) 2015-2016 Sam4Mobile
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

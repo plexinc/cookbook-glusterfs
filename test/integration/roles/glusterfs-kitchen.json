@@ -1,0 +1,25 @@
+{
+  "name": "glusterfs-kitchen",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "glusterfs": {
+      "role": "glusterfs",
+      "size": 3,
+      "config": {
+      }
+    }
+  },
+  "override_attributes": {
+
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[glusterfs::repository]",
+    "recipe[glusterfs::package]",
+    "recipe[glusterfs::service]",
+    "recipe[glusterfs::configure]"
+  ],
+  "env_run_lists": {
+
+  }
+}

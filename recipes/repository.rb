@@ -14,7 +14,19 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+yum_repository 'epel' do
+  description 'Extra Packages for Enterprise Linux 7'
+  mirrorlist node['epel']['mirrorlist']
+  gpgkey node['epel']['gpgkey']
+  action :create
+end
+
+gluster_base_url = node['glusterfs']['baserepo']
+gluster_url = node['glusterfs']['endpointrepo']
+
+yum_repository 'glusterfs-epel' do
+  description 'GlusterFS repository'
+  baseurl "#{gluster_base_url}/#{gluster_url}"
+  gpgkey "#{gluster_base_url}/LATEST/rsa.pub"
+  action :create
+end

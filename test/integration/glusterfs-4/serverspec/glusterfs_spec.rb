@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 Sam4Mobile
+# Copyright (c) 2015-2016 Sam4Mobile
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,12 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+require 'spec_helper'
+
+describe package('glusterfs') do
+  it { should be_installed }
+end
+
+describe file('/mnt/data') do
+  it { should be_mounted.with(type: 'fuse.glusterfs') }
+end

@@ -14,7 +14,14 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+actions :create, :start, :expand
+default_action :create
+
+attribute :name, kind_of: String, name_attribute: true
+attribute :type, kind_of: String, required: false
+attribute :type_number, kind_of: Integer, required: false
+attribute :redundancy, kind_of: String, required: false
+attribute :transport_type, kind_of: String, required: false, default: 'tcp'
+attribute :mount_points, kind_of: Array, required: true
+attribute :servers, kind_of: Array, required: false
+attribute :bin, kind_of: String, required: false, default: '/usr/sbin/gluster'

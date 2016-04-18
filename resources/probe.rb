@@ -14,7 +14,10 @@
 # limitations under the License.
 #
 
-include_recipe "#{cookbook_name}::repository"
-include_recipe "#{cookbook_name}::package"
-include_recipe "#{cookbook_name}::service"
-include_recipe "#{cookbook_name}::configure"
+actions :create
+default_action :create
+
+attribute :host, kind_of: String, name_attribute: true
+attribute :bin, kind_of: String, default: '/usr/sbin/gluster'
+attribute :peer_wait_retries, kind_of: Integer, default: 10
+attribute :peer_wait_retry_delay, kind_of: Integer, default: 10

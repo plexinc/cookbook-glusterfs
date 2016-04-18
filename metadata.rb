@@ -9,3 +9,6 @@ issues_url 'https://gitlab.com/s4m-chef-repositories/glusterfs/issues'
 version '1.0.0'
 
 supports 'centos', '>= 7.1'
+
+depends 'yum'
+depends 'cluster-search'
