@@ -14,6 +14,10 @@
 # limitations under the License.
 #
 
+# GlusterFS
+default['glusterfs']['server']['version'] = '3.7'
+glusterfs_server_version = node['glusterfs']['server']['version']
+
 # EPEL Repo
 default['epel']['mirrorlist'] =
   'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=$basearch'
@@ -25,10 +29,7 @@ default['glusterfs']['baserepo'] =
   'http://download.gluster.org/pub/gluster/glusterfs'
 
 default['glusterfs']['endpointrepo'] =
-  'LATEST/EPEL.repo/epel-$releasever/$basearch'
-
-# GlusterFS
-default['glusterfs']['server']['pkg_version'] = '3.7.10-1.el7'
+  "#{glusterfs_server_version}/LATEST/EPEL.repo/epel-$releasever/$basearch"
 
 # Cluster configuration
 # Role used by the search to find other nodes of the cluster
