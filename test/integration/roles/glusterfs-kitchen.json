@@ -17,7 +17,8 @@
     "recipe[glusterfs::repository]",
     "recipe[glusterfs::package]",
     "recipe[glusterfs::service]",
-    "recipe[glusterfs::configure]"
+    "recipe[glusterfs::configure]",
+    "recipe[glusterfs::client]"
   ],
   "env_run_lists": {
 
