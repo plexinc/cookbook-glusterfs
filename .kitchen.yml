@@ -61,17 +61,17 @@ suites:
             transport_type: 'tcp'
             mount_points: [
               'glusterfs-kitchen-1:/mnt/brick1',
-              'glusterfs-kitchen-1:/mnt/brick2',
-              'glusterfs-kitchen-1:/mnt/brick3',
-              'glusterfs-kitchen-1:/mnt/brick4',
-              'glusterfs-kitchen-2:/mnt/brick1',
               'glusterfs-kitchen-2:/mnt/brick2',
-              'glusterfs-kitchen-2:/mnt/brick3',
-              'glusterfs-kitchen-2:/mnt/brick4',
-              'glusterfs-kitchen-3:/mnt/brick1',
-              'glusterfs-kitchen-3:/mnt/brick2',
               'glusterfs-kitchen-3:/mnt/brick3',
-              'glusterfs-kitchen-3:/mnt/brick4'
+              'glusterfs-kitchen-1:/mnt/brick4',
+              'glusterfs-kitchen-2:/mnt/brick5',
+              'glusterfs-kitchen-3:/mnt/brick6',
+              'glusterfs-kitchen-1:/mnt/brick7',
+              'glusterfs-kitchen-2:/mnt/brick8',
+              'glusterfs-kitchen-3:/mnt/brick9',
+              'glusterfs-kitchen-1:/mnt/brick10',
+              'glusterfs-kitchen-2:/mnt/brick11',
+              'glusterfs-kitchen-3:/mnt/brick12'
             ]
   <% end %>
 <% end %>
