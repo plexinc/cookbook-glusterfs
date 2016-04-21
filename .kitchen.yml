@@ -52,6 +52,11 @@ suites:
     attributes:
       glusterfs:
         initiator_id: 3
+        client:
+          myvol:
+            volume: '/myvol'
+            mount_point: '/mnt/data'
+            server: 'glusterfs-kitchen-3.kitchen'
         volumes:
           myvol:
             name: 'myvol'
@@ -75,16 +80,3 @@ suites:
             ]
   <% end %>
 <% end %>
-  - name: glusterfs-4
-    driver:
-      hostname: glusterfs-4.kitchen
-      container_name: glusterfs-kitchen-4
-    run_list:
-      - recipe[glusterfs::client]
-    attributes:
-      glusterfs:
-        client:
-          myvol:
-            volume: '/myvol'
-            mount_point: '/mnt/data'
-            server: 'glusterfs-kitchen-3.kitchen'
