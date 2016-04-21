@@ -20,7 +20,7 @@
 end
 
 if node['glusterfs']['client']
-  node['glusterfs']['client'].each_pair do |_key, client|
+  node['glusterfs']['client'].each_pair do |key, client|
     directory client['mount_point'] do
       recursive true
       action :create
@@ -29,6 +29,8 @@ if node['glusterfs']['client']
       device "#{client['server']}:#{client['volume']}"
       fstype 'glusterfs'
       action [:enable, :mount]
+      only_if "gluster --remote-host=#{client['server']} \
+                 volume info #{key} | grep 'Status: Started'"
     end
   end
 end
