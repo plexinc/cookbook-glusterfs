@@ -14,27 +14,49 @@
 # limitations under the License.
 #
 
-# GlusterFS
-default['glusterfs']['server']['version'] = '3.7'
-glusterfs_server_version = node['glusterfs']['server']['version']
+# GlusterFS version
+default['glusterfs']['major_version'] = '3.7'
+default['glusterfs']['patch_version'] = 'LATEST'
 
-# EPEL Repo
-default['epel']['mirrorlist'] =
+major = node['glusterfs']['major_version']
+version = "#{major}/#{node['glusterfs']['patch_version']}"
+version = 'LATEST' if major == 'LATEST'
+
+# Auto-upgrade package ?
+default['glusterfs']['auto-upgrade'] = false
+
+# EPEL repository
+default['glusterfs']['epel']['mirrorlist'] =
   'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=$basearch'
 
-default['epel']['gpgkey'] =
+default['glusterfs']['epel']['gpgkey'] =
   'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7'
 
-default['glusterfs']['baserepo'] =
+# GlusterFS repository
+default['glusterfs']['baseurl'] =
   'http://download.gluster.org/pub/gluster/glusterfs'
+baseurl = node['glusterfs']['baseurl']
 
-default['glusterfs']['endpointrepo'] =
-  "#{glusterfs_server_version}/LATEST/EPEL.repo/epel-$releasever/$basearch"
+default['glusterfs']['repo_url'] =
+  "#{baseurl}/#{version}/EPEL.repo/epel-$releasever/$basearch"
 
-# Cluster configuration
+default['glusterfs']['gpgkey'] =
+  "#{node['glusterfs']['baseurl']}/LATEST/rsa.pub"
+
+# Cluster configuration with cluster-search
 # Role used by the search to find other nodes of the cluster
 default['glusterfs']['role'] = 'glusterfs'
 # Hosts of the cluster, deactivate search if not empty
 default['glusterfs']['hosts'] = []
 # Expected size of the cluster. Ignored if hosts is not empty
 default['glusterfs']['size'] = 3
+
+# Define who is the initiator, this is him who probes all other nodes and
+# creates/configures volumes
+default['glusterfs']['initiator_id'] = 1
+
+# Define volumes
+default['glusterfs']['volumes'] = {}
+
+# Define client mount points
+default['glusterfs']['client']
