@@ -75,15 +75,23 @@ Recipes
 
 ### Setting Up Clients
 
-Include the client recipe into the runlist of your nodes and set on them attributes.
+Permit access to gluster volumes using Gluster Native Client method
 
 #### Example
 
-```ruby
-  node['glusterfs']['client']['myvol']['volume'] = '/myvol'
-  node['glusterfs']['client']['myvol']['mount_point'] = '/mnt/data'
-  node['glusterfs']['client']['myvol']['server'] = 'host1.example'
+```json
+"glusterfs": {
+  "mounts": {
+    "myvol": {
+      "mount_point": "/mnt/data",
+      "server": "host1.example"
+    }
+  }
+}
 ```
+
+It creates a mount point on the local filesystem at /mnt/data
+using GlusterFS fuse client.
 
 Resources/Providers
 -------------------
@@ -104,46 +112,30 @@ Create a GlusterFS volume
 
 #### Example
 
-##### Creation of a replicated volume on two hosts
+##### Creation of a replicated volume with two storage servers
 
-```ruby
-glusterfs_volume 'myvol' do
-  type 'replica'
-  type_number 2
-  transport_type 'tcp'
-  mount_points ['host1.example:/mnt/brick1','host2.example:/mnt/brick2']
-end
-```
+```json
+"glusterfs": {
+  "volumes": {
+    "myvol": {
+      "type": "replica",
+      "count": 2,
+      "transport_type": "tcp",
+      "mount_points": [[
+        "host1.example:/mnt/brick1",
+        "host2.example:/mnt/brick2",
+      ]],
+      "action": [["create", "start"]]
+    }
+  }
+}
 
-#### Creation of a Distributed-Disperse volume on three hosts
-
-```ruby
-glusterfs_volume 'myvol' do
-  type 'disperse'
-  type_number: 3
-  redundancy: 'redundancy 4'
-  transport_type: 'tcp'
-  mount_points: [
-    'host1.example:/mnt/brick1',
-    'host1.example:/mnt/brick2',
-    'host1.example:/mnt/brick3',
-    'host1.example:/mnt/brick4',
-    'host2.example:/mnt/brick1',
-    'host2.example:/mnt/brick2',
-    'host2.example:/mnt/brick3',
-    'host2.example:/mnt/brick4',
-    'host3.example:/mnt/brick1',
-    'host3.example:/mnt/brick2',
-    'host3.example:/mnt/brick3',
-    'host3.example:/mnt/brick4'
-  ]
-end
 ```
 
 Changelog
 ---------
 
-Available in [CHANGELOG](CHANGELOG).
+Available in [CHANGELOG.md](CHANGELOG).
 
 Contributing
 ------------
