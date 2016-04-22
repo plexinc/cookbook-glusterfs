@@ -14,13 +14,15 @@
 # limitations under the License.
 #
 
-actions :create, :start, :expand
+actions :create, :start
 default_action :create
 
 attribute :name, kind_of: String, name_attribute: true
 attribute :type, kind_of: String, required: false
-attribute :type_number, kind_of: Integer, required: false
-attribute :redundancy, kind_of: String, required: false
-attribute :transport_type, kind_of: String, required: false, default: 'tcp'
-attribute :mount_points, kind_of: Array, required: true
-attribute :bin, kind_of: String, required: false, default: '/usr/sbin/gluster'
+attribute :count, kind_of: Integer, required: false
+attribute :redundancy, kind_of: Integer, required: false
+attribute :arbitrer, kind_of: Integer, required: false
+attribute :transport_type, kind_of: String, default: 'tcp'
+attribute :mount_points, kind_of: Array, required: false
+attribute :bin, kind_of: String, default: '/usr/sbin/gluster'
+attribute :force, kind_of: [TrueClass, FalseClass], default: false

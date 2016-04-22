@@ -18,16 +18,16 @@ use_inline_resources
 
 action :create do
   volume = new_resource.name
-  if been_created?(volume)
+  unless exist?(volume)
     converge_by("Creating #{new_resource}") do
-      volume_create
+      shell_out(volume_create_command).error!
     end
   end
 end
 
 action :start do
   volume = new_resource.name
-  if been_started?(volume)
+  unless running?(volume)
     converge_by("Starting #{new_resource}") do
       shell_out(
         "#{new_resource.bin} volume start #{new_resource.name}"
@@ -36,42 +36,43 @@ action :start do
   end
 end
 
-action :expand do
-  volume = new_resource.name
-  if been_started?(volume)
-    converge_by("Expanding #{new_resource}") do
-      shell_out(
-        "#{new_resource.bin} volume add-brick #{volume} \
-           #{new_resource.mount_points}"
-      ).error!
-    end
-  end
+def base_create_cmd
+  "#{new_resource.bin} volume create #{new_resource.name}"
 end
 
-def default_volume_command
-  "#{new_resource.bin} volume create #{new_resource.name} \
-    #{new_resource.type} #{new_resource.type_number} \
-    #{new_resource.redundancy} \
+def redundancy
+  "redundancy #{new_resource.redundancy}" if new_resource.redundancy
+end
+
+def arbitrer
+  "arbitrer #{new_resource.arbitrer}" if new_resource.arbitrer
+end
+
+def force
+  'force' if new_resource.force
+end
+
+def volume_create_command
+  <<-eos
+    #{base_create_cmd} \
+    #{new_resource.type} #{new_resource.count} \
+    #{redundancy} \
+    #{arbitrer} \
     transport #{new_resource.transport_type} \
-    #{new_resource.mount_points.join(' ')} force"
+    #{new_resource.mount_points.join(' ')} \
+    #{force}
+  eos
 end
 
-def volume_create
-  shell_out(default_volume_command).error!
-end
-
-def been_created?(volume)
+def exist?(volume)
   shell_out(
-    "#{new_resource.bin} volume list| grep #{volume}"
-  ).exitstatus == 1
+    "#{new_resource.bin} volume list | grep #{volume}"
+  ).exitstatus == 0
 end
 
-def been_started?(volume)
+def running?(volume)
   volume = new_resource.name(new_resource.name)
   shell_out(
-    "#{new_resource.bin} volume info #{volume} \
-      | grep Status \
-      | awk '{print $2}' \
-      | grep 'Started'"
-  ).exitstatus == 1
+    "#{new_resource.bin} volume info #{volume} | grep 'Status: *Started'"
+  ).exitstatus == 0
 end
