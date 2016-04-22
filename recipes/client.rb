@@ -14,24 +14,21 @@
 # limitations under the License.
 #
 
-# Install glusterfs client
+# Install glusterfs conf
 %w(glusterfs glusterfs-fuse attr).each do |pkg|
   package pkg
 end
 
-if node['glusterfs']['client']
-  node['glusterfs']['client'].each_pair do |key, client|
-    directory client['mount_point'] do
-      recursive true
-      action :create
-    end
-    mount client['mount_point'] do
-      device "#{client['server']}:#{client['volume']}"
-      fstype 'glusterfs'
-      action [:enable, :mount]
-      only_if "gluster --remote-host=#{client['server']} \
-                 volume info #{key} | grep 'Status: Started'"
-    end
+node['glusterfs']['mounts'].each_pair do |name, conf|
+  directory conf['mount_point'] do
+    recursive true
+    action :create
+  end
+  mount conf['mount_point'] do
+    device "#{conf['server']}:/#{name}"
+    fstype 'glusterfs'
+    action [:enable, :mount]
+    only_if "gluster --remote-host=#{conf['server']} \
+                 volume info #{name} | grep 'Status: Started'"
   end
 end
-return if node['glusterfs']['client'].nil?
