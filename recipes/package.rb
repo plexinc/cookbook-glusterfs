@@ -15,6 +15,5 @@
 #
 
 package 'glusterfs-server' do
-  version node['glusterfs']['server']['pkg_version']
-  action :install
+  action :upgrade if node['glusterfs']['auto-upgrade']
 end
