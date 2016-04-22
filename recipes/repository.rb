@@ -16,17 +16,14 @@
 
 yum_repository 'epel' do
   description 'Extra Packages for Enterprise Linux 7'
-  mirrorlist node['epel']['mirrorlist']
-  gpgkey node['epel']['gpgkey']
+  mirrorlist node['glusterfs']['epel']['mirrorlist']
+  gpgkey node['glusterfs']['epel']['gpgkey']
   action :create
 end
 
-gluster_base_url = node['glusterfs']['baserepo']
-gluster_url = node['glusterfs']['endpointrepo']
-
 yum_repository 'glusterfs-epel' do
   description 'GlusterFS repository'
-  baseurl "#{gluster_base_url}/#{gluster_url}"
-  gpgkey "#{gluster_base_url}/LATEST/rsa.pub"
+  baseurl node['glusterfs']['repo_url']
+  gpgkey node['glusterfs']['gpgkey']
   action :create
 end
