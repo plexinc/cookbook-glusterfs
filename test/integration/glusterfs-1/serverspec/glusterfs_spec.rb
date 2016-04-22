@@ -25,7 +25,7 @@ describe service('glusterd') do
   it { should be_enabled }
 end
 
-describe port(240_07) do
+describe port(24_007) do
   it { should be_listening }
 end
 
