@@ -52,19 +52,17 @@ suites:
     attributes:
       glusterfs:
         initiator_id: 3
-        client:
+        mounts:
           myvol:
-            volume: '/myvol'
             mount_point: '/mnt/data'
             server: 'glusterfs-kitchen-3.kitchen'
         volumes:
           myvol:
-            name: 'myvol'
             type: 'disperse'
-            type_number: 3
-            redundancy: 'redundancy 4'
+            count: 3
+            redundancy: 1
             transport_type: 'tcp'
-            mount_points: [
+            mount_points: [[
               'glusterfs-kitchen-1:/mnt/brick1',
               'glusterfs-kitchen-2:/mnt/brick2',
               'glusterfs-kitchen-3:/mnt/brick3',
@@ -77,6 +75,8 @@ suites:
               'glusterfs-kitchen-1:/mnt/brick10',
               'glusterfs-kitchen-2:/mnt/brick11',
               'glusterfs-kitchen-3:/mnt/brick12'
-            ]
+            ]]
+            action: [['create', 'start']]
+            force: true
   <% end %>
 <% end %>
