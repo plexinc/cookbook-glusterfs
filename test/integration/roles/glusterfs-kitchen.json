@@ -14,11 +14,7 @@
   },
   "chef_type": "role",
   "run_list": [
-    "recipe[glusterfs::repository]",
-    "recipe[glusterfs::package]",
-    "recipe[glusterfs::service]",
-    "recipe[glusterfs::configure]",
-    "recipe[glusterfs::client]"
+    "recipe[glusterfs]"
   ],
   "env_run_lists": {
 
