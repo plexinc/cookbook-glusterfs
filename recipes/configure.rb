@@ -22,7 +22,7 @@ return if gluster_cluster.nil?
 
 initiator_id = node['glusterfs']['initiator_id']
 if initiator_id < 1 || initiator_id > gluster_cluster['hosts'].size
-  raise 'Invalid id'
+  raise 'Invalid initiator_id, should be between 1 and cluster.size'
 end
 
 raise 'Cannot find myself in the cluster' if gluster_cluster['my_id'] == -1
@@ -34,14 +34,11 @@ if gluster_cluster['my_id'] == initiator_id
   end
 
   # Configure and start GlusterFS volumes based on attributes
-  node['glusterfs']['volumes'].each_pair do |_key, vol|
-    glusterfs_volume vol['name'] do
-      type vol['type']
-      type_number vol['type_number']
-      transport_type vol['transport_type']
-      mount_points vol['mount_points']
-      type vol['type']
-      action [:create, :start]
+  node['glusterfs']['volumes'].each_pair do |name, conf|
+    resource = glusterfs_volume name
+    conf.each_pair do |key, value|
+      value = [value] unless value.is_a? Array
+      resource.send(key, *value)
     end
   end
 end
