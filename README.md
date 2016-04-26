@@ -1,10 +1,13 @@
 GlusterFS
-==================
+=========
 
 Description
 -----------
 
-GlusterFS is a scalable network filesystem.
+GlusterFS is a scalable network filesystem. Using common off-the-shelf
+hardware, you can create large, distributed storage solutions for media
+streaming, data analysis, and other data- and bandwidth-intensive tasks.
+GlusterFS is free and open source software.
 
 This cookbook focuses on deploying a GlusterFS cluster via Chef.
 
@@ -25,32 +28,36 @@ Usage
 
 ### Easy Setup
 
-Create a role `glusterfs` having `recipe['glusterfs']` in its
-runlist and setting `node['glusterfs']['role']` to itself. Add this
-role in the runlists of the nodes you want to use for your cluster. By default,
-you need exactly 3 nodes.
+Set `node['glusterfs']['hosts']` to an array containing the hostnames of
+the nodes of the GlusterFS cluster. By default it is set to
+`[localhost]`.
 
 ### Search
 
-By default, the *config* recipe use a search to find the members of a cluster.
+It is also possible to let the *config* recipe use a search to find the members
+of a cluster. First you need to set `node['glusterfs']['role']` to `[]`. Then
 The search is parametrized by a role name, defined in attribute
-`node['glusterfs']['role']` which default to *glusterfs*.
-Node having this role in their expanded runlist will be considered in the same
-glusterfs cluster. For safety reason, if search is used, you need to define
-`node['glusterfs']['size']` (3 by default). The cookbook will return
-(with success) until the search return *size* nodes. This ensures the
-stability of the configuration during the initial startup of a cluster.
+`node['glusterfs']['role']` which default to *glusterfs*. Node having this role
+in their expanded runlist will be considered in the same GlusterFS cluster. For
+safety reason, if search is used, you need to define
+`node['glusterfs']['size']` (1 by default). The cookbook will return (with
+success) until the search return *size* nodes. This ensures the stability of
+the configuration during the initial startup of a cluster.
 
-If you do not want to use search, it is possible to define
-`node['glusterfs']['hosts']` with an array containing the hostnames of
-the nodes of a glusterfs cluster. In this case, *size* attribute is ignored
-and search deactivated.
+Be sure to set `node['glusterfs']['hosts']` to `[]` if you want to use search
+as by default it is set to `[localhost]` which deactivates search and ignore
+*size* attribute.
 
 ### Test
 
 This cookbook is fully tested through the installation of a working 3-nodes
 cluster in docker hosts. This uses kitchen (>= 1.5.0), docker (>= 1.10) and
 a small monkey-patch.
+
+At the moment, the docker images are run in privileged mode which is highly
+insecure. This is needed by GlusterFS to mount volumes. You are invited to
+check the image used (sbernard/centos-systemd-kitchen) for the tests before
+running them.
 
 For more information, see *.kitchen.yml* and *test* directory.
 
@@ -72,10 +79,9 @@ Recipes
 * configure (probe an host into the cluster and create a volume)
 * client (mount a glusterfs volume)
 
-
 ### Setting Up Clients
 
-Permit access to gluster volumes using Gluster Native Client method
+Permit access to GlusterFS volumes using Gluster Native Client method
 
 #### Example
 
@@ -146,10 +152,11 @@ request.
 License and Author
 ------------------
 
+- Author:: Samuel Bernard (<samuel.bernard@s4m.io>)
 - Author:: Florian Philippon (<florian.philippon@s4m.io>)
 
 ```text
-Copyright (c) 2015-2016 Sam4Mobile
+Copyright (c) 2016 Sam4Mobile
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
