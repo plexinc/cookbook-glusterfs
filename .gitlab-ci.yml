@@ -28,6 +28,8 @@ kitchen:
   tags:
     - kitchen
     - docker
+  only:
+    - branches
   script:
     - >
       set +o pipefail;
