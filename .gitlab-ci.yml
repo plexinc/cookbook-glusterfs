@@ -34,5 +34,5 @@ kitchen:
       grep container_name .kitchen.yml | tr -d ' ' | cut -f2 -d ':' |
       xargs docker rm --force 2> /dev/null | rm -fr .kitchen
     - kitchen create
-    - kitchen verify
-    - kitchen destroy
+    - kitchen verify -c
+    - kitchen destroy -c
