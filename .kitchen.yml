@@ -35,7 +35,7 @@ platforms:
   - name: centos-7
     driver_config:
       image: sbernard/centos-systemd-kitchen
-      privileged: true
+      privileged: true # glusterfs need it (for xattr) to mount volumes
       volume: /sys/fs/cgroup:/sys/fs/cgroup:ro
       command: /usr/lib/systemd/systemd
       network: kitchen
@@ -51,6 +51,9 @@ suites:
       - role[<%= name %>-kitchen]
     attributes:
       glusterfs:
+        role: glusterfs
+        hosts: []
+        size: 3
         initiator_id: 3
         mounts:
           myvol:

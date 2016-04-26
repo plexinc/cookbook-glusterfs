@@ -47,9 +47,9 @@ default['glusterfs']['gpgkey'] =
 # Role used by the search to find other nodes of the cluster
 default['glusterfs']['role'] = 'glusterfs'
 # Hosts of the cluster, deactivate search if not empty
-default['glusterfs']['hosts'] = []
+default['glusterfs']['hosts'] = ['localhost']
 # Expected size of the cluster. Ignored if hosts is not empty
-default['glusterfs']['size'] = 3
+default['glusterfs']['size'] = 1
 
 # Define who is the initiator, this is him who probes all other nodes and
 # creates/configures volumes
