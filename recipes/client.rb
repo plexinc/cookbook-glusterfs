@@ -27,6 +27,7 @@ node['glusterfs']['mounts'].each_pair do |name, conf|
   mount conf['mount_point'] do
     device "#{conf['server']}:/#{name}"
     fstype 'glusterfs'
+    options conf['mount_options'] if conf['mount_options']
     action [:enable, :mount]
     only_if "gluster --remote-host=#{conf['server']} \
                  volume info #{name} | grep 'Status: Started'"
