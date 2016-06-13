@@ -16,4 +16,5 @@
 
 package 'glusterfs-server' do
   action :upgrade if node['glusterfs']['auto-upgrade']
+  retries node['glusterfs']['package_retries']
 end

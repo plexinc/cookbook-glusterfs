@@ -53,6 +53,7 @@ suites:
     attributes:
       glusterfs:
         initiator_id: 3
+        package_retries: 1
         mounts:
           myvol:
             mount_point: '/mnt/data'

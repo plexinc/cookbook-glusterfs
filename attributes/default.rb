@@ -25,6 +25,10 @@ version = 'LATEST' if major == 'LATEST'
 # Auto-upgrade package ?
 default['glusterfs']['auto-upgrade'] = false
 
+# Configure retries for the package resources, default = global default (0)
+# (mostly used for test purpose)
+default['glusterfs']['package_retries'] = nil
+
 # EPEL repository
 default['glusterfs']['epel']['mirrorlist'] =
   'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=$basearch'
