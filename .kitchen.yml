@@ -51,9 +51,6 @@ suites:
       - role[<%= name %>-kitchen]
     attributes:
       glusterfs:
-        role: glusterfs
-        hosts: []
-        size: 3
         initiator_id: 3
         mounts:
           myvol:

@@ -29,24 +29,26 @@ Usage
 ### Easy Setup
 
 Set `node['glusterfs']['hosts']` to an array containing the hostnames of
-the nodes of the GlusterFS cluster. By default it is set to
-`[localhost]`.
+the nodes of the GlusterFS cluster.
 
 ### Search
 
-It is also possible to let the *config* recipe use a search to find the members
-of a cluster. First you need to set `node['glusterfs']['role']` to `[]`. Then
-The search is parametrized by a role name, defined in attribute
-`node['glusterfs']['role']` which default to *glusterfs*. Node having this role
-in their expanded runlist will be considered in the same GlusterFS cluster. For
-safety reason, if search is used, you need to define
-`node['glusterfs']['size']` (1 by default). The cookbook will return (with
-success) until the search return *size* nodes. This ensures the stability of
-the configuration during the initial startup of a cluster.
+The recommended way to use this cookbook is through the creation of a role
+per **glusterfs** cluster. This enables the search by role feature, allowing a
+simple service discovery.
 
-Be sure to set `node['glusterfs']['hosts']` to `[]` if you want to use search
-as by default it is set to `[localhost]` which deactivates search and ignore
-*size* attribute.
+In fact, there are two ways to configure the search:
+1. with a static configuration through a list of hostnames (attributes `hosts`
+   that is `['glusterfs']['hosts']`)
+2. with a real search, performed on a role (attributes `role` and `size`
+   like in `['glusterfs']['role']`). The role should be in the run-list
+   of all nodes of the cluster. The size is a safety and should be the number
+   of nodes in the cluster.
+
+If hosts is configured, `role` and `size` are ignored
+
+See [roles](test/integration/roles) for some examples and
+[Cluster Search][cluster-search] documentation for more information.
 
 ### Test
 

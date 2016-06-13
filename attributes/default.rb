@@ -47,7 +47,7 @@ default['glusterfs']['gpgkey'] =
 # Role used by the search to find other nodes of the cluster
 default['glusterfs']['role'] = 'glusterfs'
 # Hosts of the cluster, deactivate search if not empty
-default['glusterfs']['hosts'] = ['localhost']
+default['glusterfs']['hosts'] = []
 # Expected size of the cluster. Ignored if hosts is not empty
 default['glusterfs']['size'] = 1
 
