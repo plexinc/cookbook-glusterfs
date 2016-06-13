@@ -39,6 +39,7 @@ platforms:
       volume: /sys/fs/cgroup:/sys/fs/cgroup:ro
       command: /usr/lib/systemd/systemd
       network: kitchen
+      skip_preparation: true
 
 suites:
 <% { 'glusterfs' => 3 }.each do |name, n| %>
