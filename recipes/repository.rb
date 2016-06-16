@@ -21,9 +21,9 @@ yum_repository 'epel' do
   action :create
 end
 
-yum_repository 'glusterfs-epel' do
+yum_repository 'glusterfs' do
   description 'GlusterFS repository'
   baseurl node['glusterfs']['repo_url']
-  gpgkey node['glusterfs']['gpgkey']
+  gpgcheck false
   action :create
 end

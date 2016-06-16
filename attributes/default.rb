@@ -15,15 +15,9 @@
 #
 
 # GlusterFS version
-default['glusterfs']['major_version'] = '3.7'
-default['glusterfs']['patch_version'] = 'LATEST'
-
-major = node['glusterfs']['major_version']
-version = "#{major}/#{node['glusterfs']['patch_version']}"
-version = 'LATEST' if major == 'LATEST'
-
-# Auto-upgrade package ?
-default['glusterfs']['auto-upgrade'] = false
+default['glusterfs']['major_version'] = '3.8'
+major_version = node['glusterfs']['major_version']
+default['glusterfs']['package_version'] = '3.8.0-1.el7'
 
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)
@@ -37,15 +31,10 @@ default['glusterfs']['epel']['gpgkey'] =
   'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7'
 
 # GlusterFS repository
-default['glusterfs']['baseurl'] =
-  'http://download.gluster.org/pub/gluster/glusterfs'
-baseurl = node['glusterfs']['baseurl']
-
+default['glusterfs']['base_url'] =
+  'http://buildlogs.centos.org/centos/$releasever/storage/$basearch'
 default['glusterfs']['repo_url'] =
-  "#{baseurl}/#{version}/EPEL.repo/epel-$releasever/$basearch"
-
-default['glusterfs']['gpgkey'] =
-  "#{node['glusterfs']['baseurl']}/LATEST/rsa.pub"
+  "#{node['glusterfs']['base_url']}/gluster-#{major_version}"
 
 # Cluster configuration with cluster-search
 # Role used by the search to find other nodes of the cluster
