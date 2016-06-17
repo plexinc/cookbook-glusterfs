@@ -19,16 +19,13 @@ use_inline_resources
 action :create do
   host = new_resource.host
   bin = new_resource.bin
-  unless node['fqdn'] == host || been_probed?(host)
+  unless node['fqdn'] == host || probed?(host)
     converge_by("Probe #{host}") do
       execute "#{bin} peer probe #{host}" do
         action :run
       end
       execute 'check_peer_status' do
-        command <<-EOF
-          #{bin} peer status | grep -A 2 -B 1 #{host} | \
-            grep 'Peer in Cluster (Connected)'
-        EOF
+        command "grep state=3 \"$(grep -l #{host} /var/lib/glusterd/peers/*)\""
         retries new_resource.peer_wait_retries
         retry_delay new_resource.peer_wait_retry_delay
       end
@@ -36,10 +33,8 @@ action :create do
   end
 end
 
-def been_probed?(host)
-  shell_out(
-    "#{new_resource.bin} pool list | awk '{if(NR>1)print $2}' | grep #{host}"
-  ).exitstatus == 0
+def probed?(host)
+  shell_out("grep #{host} /var/lib/glusterd/peers/*").exitstatus == 0
 end
 
 def whyrun_supported?
