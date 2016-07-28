@@ -6,7 +6,7 @@ description 'Installs/Configures a GlusterFS cluster using systemd'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 source_url 'https://gitlab.com/s4m-chef-repositories/glusterfs'
 issues_url 'https://gitlab.com/s4m-chef-repositories/glusterfs/issues'
-version '1.2.0'
+version '1.2.1'
 
 supports 'centos', '>= 7.1'
 

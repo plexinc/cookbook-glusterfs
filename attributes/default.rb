@@ -17,7 +17,7 @@
 # GlusterFS version
 default['glusterfs']['major_version'] = '3.8'
 major_version = node['glusterfs']['major_version']
-default['glusterfs']['package_version'] = '3.8.0-1.el7'
+default['glusterfs']['package_version'] = '3.8.1-1.el7'
 
 # Configure retries for the package resources, default = global default (0)
 # (mostly used for test purpose)
