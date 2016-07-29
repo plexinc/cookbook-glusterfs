@@ -53,3 +53,7 @@ default['glusterfs']['volumes'] = {}
 
 # Define client mount points
 default['glusterfs']['client']
+
+# Define how long we should wait between each probe try
+default['glusterfs']['peer_wait_retries'] = 0
+default['glusterfs']['peer_wait_retry_delay'] = 0

@@ -29,8 +29,13 @@ raise 'Cannot find myself in the cluster' if gluster_cluster['my_id'] == -1
 
 if gluster_cluster['my_id'] == initiator_id
   # Probe hosts into the GlusterFS cluster
+  nb_retries = node['glusterfs']['peer_wait_retries']
+  retry_delay = node['glusterfs']['peer_wait_retry_delay']
   gluster_cluster['hosts'].each do |host|
-    glusterfs_probe host
+    glusterfs_probe host do
+      peer_wait_retries peer_wait_retries if nb_retries
+      peer_wait_retry_delay retry_delay if retry_delay
+    end
   end
 
   # Configure and start GlusterFS volumes based on attributes

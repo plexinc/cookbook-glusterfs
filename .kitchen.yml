@@ -54,6 +54,8 @@ suites:
       glusterfs:
         initiator_id: 3
         package_retries: 1
+        peer_wait_retries: 10
+        peer_wait_retry_delay: 5
         mounts:
           myvol:
             mount_point: '/mnt/data'
